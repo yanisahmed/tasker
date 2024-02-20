@@ -1,10 +1,16 @@
+import Footer from "./Footer"
+import Header from "./Header"
+import Hero from "./Hero"
+import TaskBoard from "./task/TaskBoard"
+
 function App() {
 
   return (
     <>
-      <h1 className="text-3xl font-bold underline text-center">
-      Welcome to Tasker
-    </h1>
+      <Header />
+      <Hero />
+      <TaskBoard />
+      <Footer />
     </>
   )
 }
