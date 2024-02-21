@@ -4,10 +4,11 @@ import { IDefaultTask } from "./TaskBoard";
 
 type TaskListProps = {
     tasks: IDefaultTask[]
-    onEdit: (task: IDefaultTask) => void
+    onEdit: (task: IDefaultTask) => void,
+    onDelete: (id: string) => void,
+    onFav: (id: string) => void
 }
-export default function TaskList({ tasks, onEdit }: TaskListProps) {
-    console.log(tasks)
+export default function TaskList({ tasks, onEdit, onDelete, onFav }: TaskListProps) {
     return (
         <div className="overflow-auto">
             <table className="table-fixed overflow-auto xl:w-full">
@@ -25,8 +26,12 @@ export default function TaskList({ tasks, onEdit }: TaskListProps) {
 
                     {
                         tasks.map(task => (
-                            <tr className="border-b border-[#2E3443] [&>td]:align-baseline [&>td]:px-4 [&>td]:py-2">
-                                <td>{task.isFavourite ? <FaStar color="yellow" /> : <FaStar color="gray" />}</td>
+                            <tr key={task.id} className="border-b border-[#2E3443] [&>td]:align-baseline [&>td]:px-4 [&>td]:py-2">
+                                <td>
+                                    <button onClick={() => onFav(task.id)}>
+                                        {task.isFavourite ? <FaStar color="yellow" /> : <FaStar color="gray" />}
+                                    </button>
+                                </td>
                                 <td>{task.title}</td>
                                 <td>
                                     <div>
@@ -37,7 +42,7 @@ export default function TaskList({ tasks, onEdit }: TaskListProps) {
                                     <ul className="flex justify-center gap-1.5 flex-wrap">
                                         {
                                             task.tags.map((tag) => (
-                                                <li>
+                                                <li key={tag}>
                                                     <span
                                                         className="inline-block h-5 whitespace-nowrap rounded-[45px] bg-[#00D991A1] px-2.5 text-sm capitalize text-[#F4F5F6]">{tag}</span>
                                                 </li>
@@ -60,7 +65,7 @@ export default function TaskList({ tasks, onEdit }: TaskListProps) {
                                 <td className="text-center">{task.priority}</td>
                                 <td>
                                     <div className="flex items-center justify-center space-x-3">
-                                        <button className="text-red-500">Delete</button>
+                                        <button onClick={() => onDelete(task.id)} className="text-red-500">Delete</button>
                                         <button onClick={() => onEdit(task)} className="text-blue-500">Edit</button>
                                     </div>
                                 </td>

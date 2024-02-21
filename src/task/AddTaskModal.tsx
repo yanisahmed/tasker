@@ -2,10 +2,11 @@ import { ChangeEvent, useState } from "react";
 import { IDefaultTask } from "./TaskBoard";
 
 type TaskModalProps = {
-    onSave: (task: IDefaultTask) => void,
+    onSave: (task: IDefaultTask, isAdd: boolean) => void,
+    onClose: () => void,
     taskToUpdate: IDefaultTask | null
 }
-export default function AddTaskModal({ onSave, taskToUpdate }: TaskModalProps) {
+export default function AddTaskModal({ onSave, taskToUpdate, onClose }: TaskModalProps) {
     const [task, setTask] = useState(taskToUpdate || {
         id: crypto.randomUUID(),
         title: "",
@@ -14,6 +15,8 @@ export default function AddTaskModal({ onSave, taskToUpdate }: TaskModalProps) {
         priority: "",
         isFavourite: false
     })
+
+    const [isAdd, setIsAdd] = useState(Object.is(taskToUpdate, null));
 
     const handleChange = (evt: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
         const name: string = evt.target.name;
@@ -37,7 +40,7 @@ export default function AddTaskModal({ onSave, taskToUpdate }: TaskModalProps) {
                 <h2
                     className="mb-9 text-center text-2xl font-bold text-white lg:mb-11 lg:text-[28px]"
                 >
-                    Add New Task
+                    {isAdd ? "Add New Task" : "Edit Task"}
                 </h2>
 
                 <div className="space-y-9 text-white lg:space-y-10">
@@ -100,11 +103,17 @@ export default function AddTaskModal({ onSave, taskToUpdate }: TaskModalProps) {
                 </div>
                 <div className="mt-16 flex justify-center lg:mt-20">
                     <button
+                        className="rounded bg-red-600 px-4 py-2 me-4 text-white transition-all hover:opacity-80"
+                        onClick={onClose}
+                    >
+                        Close
+                    </button>
+                    <button
                         type="submit"
                         className="rounded bg-blue-600 px-4 py-2 text-white transition-all hover:opacity-80"
-                        onClick={() => onSave(task)}
+                        onClick={() => onSave(task, isAdd)}
                     >
-                        Create new Task
+                        Save
                     </button>
                 </div>
             </form>
